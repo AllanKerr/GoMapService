@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package com.github.aeonlucid.pogoprotos.gomap;
+
+option java_package = "com.github.aeonlucid.pogoprotos";
+option java_outer_classname = "GoMap";
+
+import "com/github/aeonlucid/pogoprotos/Enums.proto";
+import "com/github/aeonlucid/pogoprotos/Data.proto";
+import "com/github/aeonlucid/pogoprotos/networking/Responses.proto";
+
+message GetPlayerInfoResponse {
+	com.github.aeonlucid.pogoprotos.enums.TeamColor team_color = 1;
+	repeated com.github.aeonlucid.pogoprotos.data.PokemonData pokemon = 2;
+	repeated com.github.aeonlucid.pogoprotos.gomap.PlayerActivityLog recent_activity = 3;
+	repeated com.github.aeonlucid.pogoprotos.gomap.GymHistory gym_history = 4;
+	repeated string gym_ids = 5;
+}
+
+message NotificationSetting {
+	com.github.aeonlucid.pogoprotos.enums.PokemonId pokemon_id = 1;
+	com.github.aeonlucid.pogoprotos.gomap.NotificationType notification_type = 2;
+}
+
+message GlobalActivityResponse {
+	repeated com.github.aeonlucid.pogoprotos.gomap.GlobalActivityLog activity = 1;
+}
+
+message UpdateNotificationsRequest {
+	string device_identifier = 1;
+	repeated com.github.aeonlucid.pogoprotos.gomap.NotificationSetting settings = 2;
+}
+
+enum GymActivityType {
+	ACTIVITY_UNSET = 0;
+	ACTIVITY_ADDED = 1;
+	ACTIVITY_TAKEDOWN = 2;
+}
+
+message UpdateDataResponse {
+	repeated com.github.aeonlucid.pogoprotos.gomap.GlobalActivityLog activity = 1;
+	repeated com.github.aeonlucid.pogoprotos.networking.responses.GetGymDetailsResponse gyms_details = 2;
+	repeated com.github.aeonlucid.pogoprotos.gomap.EncounterData encounter = 3;
+	int32 status = 4;
+}
+
+enum NotificationType {
+	NONE = 0;
+	VIBRATE = 1;
+	ALARM = 2;
+}
+
+message GetPlayerInfoRequest {
+	string player_name = 1;
+}
+
+message NameSearchRequest {
+	string player_name = 1;
+}
+
+message RegisterTokenRequest {
+	string token = 1;
+	string device_identifier = 2;
+}
+
+message UpdateDataRequest {
+	uint64 timestamp = 1;
+}
+
+message GlobalActivityLog {
+	uint64 timestamp = 1;
+	string gym_id = 2;
+	com.github.aeonlucid.pogoprotos.gomap.GymActivityType type = 3;
+	com.github.aeonlucid.pogoprotos.enums.TeamColor team = 4;
+	string player_name = 5;
+}
+
+message EncounterData {
+	com.github.aeonlucid.pogoprotos.enums.PokemonId pokemon_id = 1;
+	uint64 found_time = 2;
+	uint64 expiration_time = 3;
+	double latitude = 4;
+	double longitude = 5;
+}
+
+message PlayerActivityLog {
+	uint64 timestamp = 1;
+	string gym_id = 2;
+	com.github.aeonlucid.pogoprotos.gomap.GymActivityType type = 3;
+}
+
+message GymHistory {
+	uint64 num = 1;
+	string gym_id = 2;
+}
+
+message NameSearchResponse {
+	repeated string names = 1;
+}
+
